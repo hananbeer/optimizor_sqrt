@@ -2,14 +2,13 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "../src/Sqrt.sol";
 import "../src/SqrtSolver.sol";
 import "../src/IOptimizor.sol";
 
 import "forge-std/console.sol";
 
 contract SqrtTest is Test {
-    Sqrt public sqrt;
+    ISqrt public sqrt;
     SqrtSolver public solver;
     IOptimizor optimizor;
 
@@ -17,7 +16,6 @@ contract SqrtTest is Test {
     }
 
     function test_solve() public {
-        vm.ffi();
         bytes memory bytecode = hex"60388060093d393df3346100365761bee0318060201c59526001600160201b0316595261bee1318060201c59526001600160201b03165952475952596004f35b00";
 
         address sqrt_addr;
@@ -35,7 +33,7 @@ contract SqrtTest is Test {
             sqrt_addr
         ];
 
-        sqrt = Sqrt(sqrt_addr);
+        sqrt = ISqrt(sqrt_addr);
         solver = new SqrtSolver();
         optimizor = IOptimizor(0x66DE7D67CcfDD92b4E5759Ed9dD2d7cE3C9154a9);
 
@@ -45,7 +43,7 @@ contract SqrtTest is Test {
         optimizor.commit(key);
 
         // pass time
-        vm.difficulty(123456);
+        vm.difficulty(0x66DE7D67CcfDD92b4E5759Ed9dD2d7cE3C9154a954a954a954a9);
         vm.roll(block.number + 66);
 
         console.log("solve:", block.difficulty);
@@ -66,7 +64,7 @@ contract SqrtTest is Test {
         payable(holders[4]).send(solution[4] >> 32);
 
         console.log("challenge...");
-        optimizor.challenge(1, address(sqrt), address(this), 0x777);
+        optimizor.challenge(1, sqrt_addr, address(this), 0x777);
         require(optimizor.balanceOf(address(this)) > 0, "no NFT?");
         console.log("challenge success");
 
