@@ -1,0 +1,15 @@
+#define macro MAIN() = takes (0) returns (0) {
+  callvalue end jumpi
+  0xbee0 balance dup1
+  0x20 shr msize mstore
+  0x1 0x1 0x20 shl sub and msize mstore
+  0xbee1 balance dup1
+  0x20 shr msize mstore
+  0x1 0x1 0x20 shl sub and msize mstore
+  selfbalance
+  msize mstore
+  msize 0x04 return
+
+end:
+  stop
+}
