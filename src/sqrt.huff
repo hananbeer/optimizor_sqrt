@@ -1,14 +1,18 @@
 #define macro MAIN() = takes (0) returns (0) {
+  // 1 + 3 + 1 + 1 = 6 bytes
   callvalue end jumpi
-  0xbee0 balance dup1
-  0x20 shr msize mstore
-  0x1 0x1 0x20 shl sub and msize mstore
-  0xbee1 balance dup1
-  0x20 shr msize mstore
-  0x1 0x1 0x20 shl sub and msize mstore
   selfbalance
-  msize mstore
-  msize 0x04 return
+
+  pc // 0x6
+  balance dup1
+  0x18 shr msize mstore
+  chainid chainid 0x18 shl sub and msize mstore
+  pc // 0x17
+  balance dup1
+  0x18 shr msize mstore
+  chainid chainid 0x18 shl sub and msize mstore
+  msize mstore // from selfbalance
+  msize 0x05 return
 
 end:
   stop

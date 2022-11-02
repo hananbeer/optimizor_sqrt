@@ -16,7 +16,7 @@ contract SqrtTest is Test {
     }
 
     function test_solve() public {
-        bytes memory bytecode = hex"60388060093d393df3346100365761bee0318060201c59526001600160201b0316595261bee1318060201c59526001600160201b03165952475952596004f35b00";
+        bytes memory bytecode = hex"60308060093d393df33461002e574758318060181c5952464660181b0316595258318060181c5952464660181b031659525952596005f35b00";
 
         address sqrt_addr;
         assembly {
@@ -26,8 +26,8 @@ contract SqrtTest is Test {
         console.log("sqrt deployed to: %s, %s", sqrt_addr, sqrt_addr.balance);
 
         address[5] memory holders = [
-            0x000000000000000000000000000000000000bEe0,
-            0x000000000000000000000000000000000000beE1,
+            0x0000000000000000000000000000000000000006,
+            0x0000000000000000000000000000000000000017,
             0x000000000000000000000000000000000000BeE2,
             0x000000000000000000000000000000000000Bee3,
             sqrt_addr
@@ -55,13 +55,14 @@ contract SqrtTest is Test {
         //     console.log("paid: %s -> %s", solution[i], holders[i].balance);
         // }
 
-        uint256 pay0 = (solution[1] >> 32) | (((solution[0] >> 32) & 0xffffffff) << 32);
-        uint256 pay1 = (solution[3] >> 32) | (((solution[2] >> 32) & 0xffffffff) << 32);
+        uint256 pay0 = (solution[1] >> 40) | (((solution[0] >> 40) & 0xffffff) << 24);
+        uint256 pay1 = (solution[3] >> 40) | (((solution[2] >> 40) & 0xffffff) << 24);
         console.log("pay: %s, %s", pay0, pay1);
 
-        payable(holders[0]).send(pay0);
-        payable(holders[1]).send(pay1);
-        payable(holders[4]).send(solution[4] >> 32);
+        payable(holders[0]).send(pay0-holders[0].balance);
+        payable(holders[1]).send(pay1-holders[1].balance);
+        payable(holders[4]).send(solution[4] >> 40);
+        console.log("balance: %s, %s", holders[0].balance, holders[1].balance);
 
         console.log("challenge...");
         optimizor.challenge(1, sqrt_addr, address(this), 0x777);
