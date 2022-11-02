@@ -6,11 +6,11 @@
   pc // 0x6
   balance dup1
   0x18 shr msize mstore
-  chainid chainid 0x18 shl sub and msize mstore
-  pc // 0x17
+  0xffffff and msize mstore
+  pc // 0x15
   balance dup1
   0x18 shr msize mstore
-  chainid chainid 0x18 shl sub and msize mstore
+  0xffffff and msize mstore
   msize mstore // from selfbalance
   msize 0x05 return
 
