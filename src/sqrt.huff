@@ -1,19 +1,10 @@
 #define macro MAIN() = takes (0) returns (0) {
-  // 1 + 3 + 1 + 1 = 6 bytes
-  callvalue end jumpi
-  selfbalance
-
-  pc // 0x6
-  balance dup1
+  0x06 balance dup1
   0x18 shr msize mstore
   0xffffff and msize mstore
-  pc // 0x15
-  balance dup1
+  pc balance dup1
   0x18 shr msize mstore
   0xffffff and msize mstore
-  msize mstore // from selfbalance
+  selfbalance msize mstore
   msize 0x05 return
-
-end:
-  stop
 }
